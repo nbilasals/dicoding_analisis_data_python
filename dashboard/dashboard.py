@@ -7,7 +7,7 @@ import urllib
 from func import DataAnalyzer, BrazilMapPlotter
 from babel.numbers import format_currency
 sns.set(style='dark')
-st.set_option('deprecation.showPyplotGlobalUse', False)
+# st.set_option('deprecation.showPyplotGlobalUse', False)
 
 # Dataset
 datetime_cols = ["order_approved_at", "order_delivered_carrier_date", "order_delivered_customer_date",
@@ -36,10 +36,10 @@ max_date = all_df["order_approved_at"].max()
 # Sidebar
 with st.sidebar:
     # Title
-    st.title("E-commerce Public Datase")
+    st.title("Brazil E-commerce Public Dataset")
 
     # Logo Image
-    st.image("logo.jpg")
+    st.image("logo.png")
 
     # Date Range
     start_date, end_date = st.date_input(
@@ -64,7 +64,7 @@ state, most_common_state = function.create_bystate_df()
 order_status, common_status = function.create_order_status()
 
 # Title
-st.header("E-Commerce Dashboard :convenience_store:")
+st.header("Brazil E-commerce Public Dataset")
 
 # Daily Orders
 st.subheader("Daily Orders")
@@ -77,7 +77,7 @@ with col1:
 
 with col2:
     total_revenue = format_currency(
-        daily_orders_df["revenue"].sum(), "IDR", locale="id_ID")
+        daily_orders_df["revenue"].sum(), "BR", locale="id_ID")
     st.markdown(f"Total Revenue: **{total_revenue}**")
 
 fig, ax = plt.subplots(figsize=(12, 6))
@@ -98,12 +98,12 @@ col1, col2 = st.columns(2)
 
 with col1:
     total_spend = format_currency(
-        sum_spend_df["total_spend"].sum(), "IDR", locale="id_ID")
+        sum_spend_df["total_spend"].sum(), "BR", locale="id_ID")
     st.markdown(f"Total Spend: **{total_spend}**")
 
 with col2:
     avg_spend = format_currency(
-        sum_spend_df["total_spend"].mean(), "IDR", locale="id_ID")
+        sum_spend_df["total_spend"].mean(), "BR", locale="id_ID")
     st.markdown(f"Average Spend: **{avg_spend}**")
 
 fig, ax = plt.subplots(figsize=(12, 6))
@@ -138,7 +138,7 @@ sns.barplot(x="product_count", y="product_category_name_english",
             data=sum_order_items_df.head(5), palette=colors, ax=ax[0])
 ax[0].set_ylabel(None)
 ax[0].set_xlabel("Number of Sales", fontsize=30)
-ax[0].set_title("Produk paling banyak terjual", loc="center", fontsize=50)
+ax[0].set_title("Most Sold Product", loc="center", fontsize=50)
 ax[0].tick_params(axis='y', labelsize=35)
 ax[0].tick_params(axis='x', labelsize=30)
 
@@ -149,7 +149,7 @@ ax[1].set_xlabel("Number of Sales", fontsize=30)
 ax[1].invert_xaxis()
 ax[1].yaxis.set_label_position("right")
 ax[1].yaxis.tick_right()
-ax[1].set_title("Produk paling sedikit terjual", loc="center", fontsize=50)
+ax[1].set_title("Least Sold Product", loc="center", fontsize=50)
 ax[1].tick_params(axis='y', labelsize=35)
 ax[1].tick_params(axis='x', labelsize=30)
 
@@ -183,7 +183,7 @@ st.pyplot(fig)
 
 # Customer Demographic
 st.subheader("Customer Demographic")
-tab1, tab2, tab3 = st.tabs(["State", "Order Status", "Geolocation"])
+tab1, tab2 = st.tabs(["State", "Order Status"])
 
 with tab1:
     most_common_state = state.customer_state.value_counts().index[0]
@@ -220,11 +220,3 @@ with tab2:
     plt.ylabel("Count")
     plt.xticks(fontsize=12)
     st.pyplot(fig)
-
-with tab3:
-    map_plot.plot()
-
-    with st.expander("See Explanation"):
-        st.write('Sesuai dengan grafik yang sudah dibuat, ada lebih banyak pelanggan di bagian tenggara dan selatan. Informasi lainnya, ada lebih banyak pelanggan di kota-kota yang merupakan ibu kota (São Paulo, Rio de Janeiro, Porto Alegre, dan lainnya).')
-
-st.caption('Copyright (C) Sulistiawan A. P. 2023')
